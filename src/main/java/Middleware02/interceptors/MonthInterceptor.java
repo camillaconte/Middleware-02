@@ -33,12 +33,11 @@ public class MonthInterceptor implements HandlerInterceptor {
             throws Exception {
         String monthNumber = request.getHeader("Month-Number");
         if(request.getHeader("Month-Number") == null){
-            response.setStatus(400); //400 = Bad Request
-            System.out.println("Bad Request! Header Month-Number is null!");
+            response.sendError(400, "Bad Request! Header Month-Number is null!");
             return false;
         }
         //altrimenti esegui questa logica:
-        int monthNumberInt = Integer.parseInt("monthNumber");
+        int monthNumberInt = Integer.parseInt(monthNumber);
         Optional<Month> month = monthsList.stream().filter(singleMonth -> {
             return singleMonth.getMonthNumber() == monthNumberInt;
         }).findFirst();
@@ -46,7 +45,8 @@ public class MonthInterceptor implements HandlerInterceptor {
             request.setAttribute("MonthInterceptor-month", month.get());
             return true;
         }
-        request.setAttribute("MonthInterceptor-month", new Month (0, "nope", "nope", "nope"));
+        request.setAttribute("MonthInterceptor-month", new Month (0, "nope",
+                             "nope", "nope"));
         return true;
     }
 
